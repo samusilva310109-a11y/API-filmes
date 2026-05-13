@@ -16,7 +16,7 @@ async function inserirNovoAtor(ator, contentType) {
     
     try {
         if(String(contentType).toLowerCase() == 'application/json'){
-            let validar = await validarDados(ator)           
+            let validar = await validarDados(ator)                   
 
             if(validar){
                 return validar //400
@@ -45,8 +45,45 @@ async function inserirNovoAtor(ator, contentType) {
     }
 }
 
-async function atualizarAtor(ator) {
-    
+async function atualizarAtor(ator, id, contentType) {
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
+
+    try {
+        if(String(contentType).toLowerCase() == 'application/json'){
+            
+            let resultBuscaAtor = await buscarAtor(id)
+
+            if (resultBuscaAtor.status) {
+                let validar = await validarDados(ator)
+
+                if(!validar){
+
+                    ator.id = Number(id)
+
+                    let atualizarAtor = await atorDAO.updateAtor(await tratarDados(ator))
+
+                    if (atualizarAtor) {
+                        customMessage.DEFAULT_MESSAGE.status = customMessage.SUCESS_UPDATE_ITEM.status
+                        customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCESS_UPDATE_ITEM.status_code
+                        customMessage.DEFAULT_MESSAGE.response.response = ator
+
+                        return customMessage.DEFAULT_MESSAGE
+                    } else {
+                        return customMessage.INTERNAL_SERVER_ERROR_MODEL //500 [MODEL]
+                    }
+                }else{
+                    return validar // 400
+                }
+            } else {
+                return resultBuscaAtor //404
+            }
+
+        }else{
+            return customMessage.ERROR_CONTENT_TYPE //415
+        }
+    } catch (error) {
+        return customMessage.INTERNAL_SERVER_ERROR_CONTROLLER //500 [CONTROLLER]
+    }
 }
 
 async function listarAtores() {
@@ -77,11 +114,60 @@ async function listarAtores() {
 }
 
 async function buscarAtor(id) {
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
     
+    try {
+        //Validação para verificar a validade do id
+        if(id == undefined || String(id).replaceAll(" ", "") == '' || id == null || isNaN(id)){
+            customMessage.ERROR_BAD_REQUEST.field  = "[ID] INVÁLIDO"
+            return customMessage
+        }else{
+            let result = await atorDAO.selectByIdAtor(id)
+
+            //Verifica se a busca foi realizada
+            if (result) {
+                //Verifica se o filme foi econtrado
+                if (result.length > 0) {
+                    customMessage.DEFAULT_MESSAGE.status = customMessage.SUCESS_RESPONSE.status
+                    customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCESS_RESPONSE.status_code
+                    customMessage.DEFAULT_MESSAGE.response.ator = result
+
+                    return customMessage.DEFAULT_MESSAGE //200
+                } else {
+                    return customMessage.ERROR_NOT_FOUND // 404
+                }
+                
+            }else{
+                return customMessage.INTERNAL_SERVER_ERROR_MODEL //500 [MODEL]
+            }
+        }
+    } catch (error) {
+        return customMessage.INTERNAL_SERVER_ERROR_CONTROLLER //500 [CONTROLLER]
+    }
 }
 
 async function excluirAtor(id) {
-    
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
+
+    try {
+        let resultBuscaAtor = await buscarAtor(id)
+
+        if(resultBuscaAtor.status){
+            let result = await atorDAO.deleteAtor(id)
+
+            if (result) {
+                return customMessage.SUCESS_DELETED_ITEM //200
+            } else {
+                return customMessage.INTERNAL_SERVER_ERROR_MODEL //500 [MODEL]
+            }
+        }else{
+            return resultBuscaAtor //404
+        }
+    } catch (error) {
+        console.log(error);
+        
+        return customMessage.INTERNAL_SERVER_ERROR_CONTROLLER //500 [CONTROLLER]
+    }
 }
 
 async function validarDados(ator) {

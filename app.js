@@ -91,12 +91,41 @@ app.get("/v1/senai/locadora/ator", async (request, response) =>{
     response.json(result)
 })
 
+app.get("/v1/senai/locadora/ator/:id", async (request, response) => {
+    let idAtor = request.params.id
+
+    let result = await controllerAtor.buscarAtor(idAtor)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
 app.post("/v1/senai/locadora/ator", bodyParserJSON, async (request, response) => {
     let dados = request.body
 
     let contentType = request.headers['content-type']
 
     let result = await controllerAtor.inserirNovoAtor(dados, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.delete("/v1/senai/locadora/ator/:id", async (request, response) => {
+    let idAtor = request.params.id
+
+    let result = await controllerAtor.excluirAtor(idAtor)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.put("/v1/senai/locadora/ator/:id", bodyParserJSON, async (request, response) => {
+    let contentType = request.headers['content-type']
+    let id = request.params.id
+    let dados = request.body
+
+    let result = await controllerAtor.atualizarAtor(dados, id, contentType)
 
     response.status(result.status_code)
     response.json(result)

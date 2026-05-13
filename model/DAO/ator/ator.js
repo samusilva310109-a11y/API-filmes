@@ -39,7 +39,21 @@ async function insertAtor(ator) {
 }
 
 async function updateAtor(ator) {
-    
+    try {
+        let sql = `
+            update tbl_ator set nome = '${ator.nome}' where id=${ator.id}
+        `
+
+        let result = await knexConection.raw(sql)
+
+        if (result) {
+            return true
+        } else {
+            return false
+        }
+    } catch (error) {
+        return false
+    }
 }
 
 async function selectAllAtor() {
@@ -61,11 +75,33 @@ async function selectAllAtor() {
 }
 
 async function selectByIdAtor(id) {
-    
+    try {
+        let sql = `select * from tbl_ator where id=${id};`
+        let result = await knexConection.raw(sql)
+
+        if(Array.isArray(result)){
+            return result[0]
+        }else{
+            return false
+        }
+    } catch (error) {
+        return false
+    }
 }
 
 async function deleteAtor(id) {
-    
+   try {
+        let sql = `delete from tbl_ator where id=${id};`
+        let result = await knexConection.raw(sql)
+
+        if(result){
+            return true
+        }else{
+            return false
+        }
+   } catch (error) {
+        return false
+   } 
 }
 
 module.exports = {
