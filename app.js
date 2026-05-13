@@ -24,6 +24,7 @@ app.use(cors(corsOptions))
 //Import das CONTROLLER do projeto
 const controllerFilme = require("./controller/filme/controller_filme.js")
 const controllerAtor = require("./controller/ator/controller_ator.js")
+const controllerDiretor = require("./controller/diretor/controller_diretor.js")
 
 //ENDPOINTS
 
@@ -126,6 +127,25 @@ app.put("/v1/senai/locadora/ator/:id", bodyParserJSON, async (request, response)
     let dados = request.body
 
     let result = await controllerAtor.atualizarAtor(dados, id, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+//Endpoints realacionados ao diretor
+
+app.get("/v1/senai/locadora/diretor", async (request, response) => {
+    let result = await controllerDiretor.listarDiretores()
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.post("/v1/senai/locadora/diretor", bodyParserJSON, async (request, response) => {
+    let dados = request.body
+    let contentType = request.headers['content-type']
+
+    let result = await controllerDiretor.inserirNovoDiretor(dados, contentType)
 
     response.status(result.status_code)
     response.json(result)

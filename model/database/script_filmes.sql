@@ -99,6 +99,13 @@ create table tbl_roteirista(
     nome		varchar(100) not null 
 );
 
+insert into tbl_diretor(
+                nome            
+            )values(
+                'Maria Carlos'
+            );
+            
+select * from tbl_diretor order by id desc;
 
 
 

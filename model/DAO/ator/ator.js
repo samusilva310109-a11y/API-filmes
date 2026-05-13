@@ -26,7 +26,6 @@ async function insertAtor(ator) {
         `
 
         let result = await knexConection.raw(sql)
-        console.log(result);
                         
 
         if(result)
@@ -60,7 +59,7 @@ async function selectAllAtor() {
     try {
         let sql = 
         `
-            select * from tbl_ator where id > 0
+            select * from tbl_ator order by id desc;
         `
 
         let result = await knexConection.raw(sql)        
