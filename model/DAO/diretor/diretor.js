@@ -38,7 +38,18 @@ async function insertDiretor(diretor) {
 }
 
 async function updateDiretor(diretor) {
-    
+    try {
+        let sql = `update tbl_diretor set nome = '${diretor.nome}' where id = ${diretor.id}`
+        let result = await knexConection.raw(sql)
+
+        if (result) {
+            return true
+        } else {
+            return false
+        }
+    } catch (error) {
+        return false
+    }
 }
 
 async function selectAllDiretor(){
@@ -76,7 +87,18 @@ async function selectByIdDiretor(id){
 }
 
 async function deleteDiretor(id) {
-    
+    try {
+        let sql = `delete from tbl_diretor where id = ${id}`
+        let result = await knexConection.raw(sql)
+
+        if (result) {
+            return true
+        } else {
+            return false
+        }
+    } catch (error) {
+        return false
+    }
 }
 
 module.exports = {

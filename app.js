@@ -141,11 +141,40 @@ app.get("/v1/senai/locadora/diretor", async (request, response) => {
     response.json(result)
 })
 
+app.get("/v1/senai/locadora/diretor/:id", async (request, response) => {
+    let idDiretor = request.params.id
+    
+    let result = await controllerDiretor.buscarDiretor(idDiretor)
+    
+    response.status(result.status_code)
+    response.json(result)
+})
+
 app.post("/v1/senai/locadora/diretor", bodyParserJSON, async (request, response) => {
     let dados = request.body
     let contentType = request.headers['content-type']
 
     let result = await controllerDiretor.inserirNovoDiretor(dados, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.delete("/v1/senai/locadora/diretor/:id", async (request, response) => {
+    let idDiretor = request.params.id
+
+    let result = await controllerDiretor.excluirDiretor(idDiretor)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.put("/v1/senai/locadora/diretor/:id", bodyParserJSON, async (request, response) => {
+    let contentType = request.headers['content-type']
+    let dados = request.body
+    let idDiretor = request.params.id
+
+    let result = await controllerDiretor.atualizarDiretor(dados, idDiretor, contentType)
 
     response.status(result.status_code)
     response.json(result)

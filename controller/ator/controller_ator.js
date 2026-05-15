@@ -65,7 +65,7 @@ async function atualizarAtor(ator, id, contentType) {
                     if (atualizarAtor) {
                         customMessage.DEFAULT_MESSAGE.status = customMessage.SUCESS_UPDATE_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCESS_UPDATE_ITEM.status_code
-                        customMessage.DEFAULT_MESSAGE.response.response = ator
+                        customMessage.DEFAULT_MESSAGE.response = ator
 
                         return customMessage.DEFAULT_MESSAGE
                     } else {
