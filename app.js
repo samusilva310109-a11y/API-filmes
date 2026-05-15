@@ -25,6 +25,7 @@ app.use(cors(corsOptions))
 const controllerFilme = require("./controller/filme/controller_filme.js")
 const controllerAtor = require("./controller/ator/controller_ator.js")
 const controllerDiretor = require("./controller/diretor/controller_diretor.js")
+const controllerClassificacao = require("./controller/classificacao/classificacao.js")
 
 //ENDPOINTS
 
@@ -179,6 +180,26 @@ app.put("/v1/senai/locadora/diretor/:id", bodyParserJSON, async (request, respon
     response.status(result.status_code)
     response.json(result)
 })
+
+//Endpoints relacionados a classificação
+
+app.get("/v1/senai/locadora/classificacao", async (request, response) => {
+    let result = await controllerClassificacao.listarClassificacoes()
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.post("/v1/senai/locadora/classificacao", bodyParserJSON, async (request, response) => {
+    let contentType = request.headers['content-type']
+    let dados = request.body
+
+    let result = await controllerClassificacao.inserirNovaClassificacao(dados, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
 //Fazer o start na API (aguardando as requisições)
 app.listen(8080, () => {
     console.log("API aguardando novas requisições...");

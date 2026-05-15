@@ -46,7 +46,7 @@ async function inserirNovoDiretor(diretor, contentType) {
     }
 }
 
-async function atualizarDiretor(diretor, id, contentType) {''
+async function atualizarDiretor(diretor, id, contentType) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
 
     try {

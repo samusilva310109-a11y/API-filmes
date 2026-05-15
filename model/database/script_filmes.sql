@@ -90,7 +90,7 @@ create table tbl_sexo(
 #Tabela de classificação
 create table tbl_classificacao(
 	id					int not null auto_increment primary key,
-    classificacao		varchar(10) not null
+    classificacao		varchar(4) not null
 );
 
 #Tabela de roteirista
@@ -98,14 +98,6 @@ create table tbl_roteirista(
 	id			int not null auto_increment primary key,
     nome		varchar(100) not null 
 );
-
-insert into tbl_diretor(
-                nome            
-            )values(
-                'Maria Carlos'
-            );
-            
-select * from tbl_diretor order by id desc;
 
 
 
